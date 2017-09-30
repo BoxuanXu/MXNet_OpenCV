@@ -19,7 +19,7 @@ if [ ! -s "/usr/local/openblas/lib/libopenblas.so" ];then
       
       ln -s /usr/local/openblas/lib/libopenblas.so /usr/lib64/libopenblas.so
       if [ -s "/etc/profile.d/openblas.sh" ];then
-         echo PASSWORD | sudo rm -rf /etc/profile.d/openblas.sh    
+         rm -rf /etc/profile.d/openblas.sh    
       fi	
 
       echo \#\!/bin/sh >> /etc/profile.d/openblas.sh
@@ -66,7 +66,7 @@ if ! command -v cmake;then
       make install
       
       if [ -s "/etc/profile.d/cmake.sh" ];then
-         echo PASSWORD | sudo rm -rf /etc/profile.d/cmake.sh
+         rm -rf /etc/profile.d/cmake.sh
       fi
 
       echo \#\!/bin/sh >> /etc/profile.d/cmake.sh

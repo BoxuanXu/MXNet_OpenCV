@@ -4,41 +4,38 @@
 #__editor__      = "xuboxuan"
 #__Date__        = "20170914"
 
-echo "please enter your password:"
-read PASSWORD
-
 s_pwd=$PWD
 
 #openblas install
 if [ ! -s "/usr/local/openblas/lib/libopenblas.so" ];then
    echo "begin install openblas..."
-   echo PASSWORD | sudo mkdir /usr/local/openblas
+   mkdir /usr/local/openblas
    
    if [ -d "OpenBLAS" ];then
       cd OpenBLAS
        
       make PREFIX=/usr/local/openblas
-      echo PASSWORD | sudo make install PREFIX=/usr/local/openblas
+      make install PREFIX=/usr/local/openblas
 	
-      echo PASSWORD | sudo ln -s /usr/local/openblas/lib/libopenblas.so /usr/lib64/libopenblas.so
+      ln -s /usr/local/openblas/lib/libopenblas.so /usr/lib64/libopenblas.so
       if [ -s "/etc/profile.d/openblas.sh" ];then
-         echo PASSWORD | sudo rm -rf /etc/profile.d/openblas.sh    
+         rm -rf /etc/profile.d/openblas.sh    
       fi	
 
-      echo PASSWORD | sudo sh -c "echo \#\!/bin/sh >> /etc/profile.d/openblas.sh"
-      echo PASSWORD | sudo sh -c "echo export OPENBLAS_HOME=/usr/local/openblas >> /etc/profile.d/openblas.sh"
-      echo PASSWORD | sudo sh -c "echo export OPENBLAS_INC=\"$\"OPENBLAS_HOME/include >> /etc/profile.d/openblas.sh"
-      echo PASSWORD | sudo sh -c "echo export C_INCLUDE_PATH=\"$\"C_INCLUDE_PATH:\"$\"OPENBLAS_INC >> /etc/profile.d/openblas.sh"
-      echo PASSWORD | sudo sh -c "echo export CPLUS_INCLUDE_PATH=\"$\"CPLUS_INCLUDE_PATH:\"$\"OPENBLAS_INC >> /etc/profile.d/openblas.sh"
+      echo \#\!/bin/sh >> /etc/profile.d/openblas.sh
+      echo export OPENBLAS_HOME=/usr/local/openblas >> /etc/profile.d/openblas.sh
+      echo export OPENBLAS_INC=\$OPENBLAS_HOME/include >> /etc/profile.d/openblas.sh
+      echo export C_INCLUDE_PATH=\$C_INCLUDE_PATH:\$OPENBLAS_INC >> /etc/profile.d/openblas.sh
+      echo export CPLUS_INCLUDE_PATH=\$CPLUS_INCLUDE_PATH:\$OPENBLAS_INC >> /etc/profile.d/openblas.sh
 
       source /etc/profile
   
       if [ -s "/etc/ld.so.conf.d/openblas.conf" ];then
-         echo PASSWORD | sudo rm -rf /etc/ld.so.conf.d/openblas.conf   
+         rm -rf /etc/ld.so.conf.d/openblas.conf   
       fi
 
-      echo PASSWORD | sudo sh -c "echo /usr/local/openblas/lib >> /etc/ld.so.conf.d/openblas.conf"
-      echo PASSWORD | sudo ldconfig
+      echo /usr/local/openblas/lib >> /etc/ld.so.conf.d/openblas.conf
+      ldconfig
    else
       echo "Don't find OpenBLAS-0.2.19.zip"
       exit 1;
@@ -60,22 +57,21 @@ fi
 #cmake install
 if ! command -v cmake;then
    echo "begin install cmake..."
-   echo PASSWORD | sudo mkdir /usr/local/cmake
+   mkdir /usr/local/cmake
    if [ -s "cmake-3.8.0.tar.gz" ];then
       tar -xvf cmake-3.8.0.tar.gz
       cd cmake-3.8.0
       ./bootstrap --prefix=/usr/local/cmake
       make
-      echo PASSWORD | sudo make install
+      make install
       
       if [ -s "/etc/profile.d/cmake.sh" ];then
-         echo PASSWORD | sudo rm -rf /etc/profile.d/cmake.sh
+         rm -rf /etc/profile.d/cmake.sh
       fi
 
-      echo PASSWORD | sudo sh -c "echo \#\!/bin/sh >> /etc/profile.d/cmake.sh"
-      echo PASSWORD | sudo sh -c "echo export CMAKE_HOME=/usr/local/cmake >> /etc/profile.d/cmake.sh"
-      echo PASSWORD | sudo sh -c "echo export PATH=\"$\"CMAKE_HOME/bin:\"$\"PATH >> /etc/profile.d/cmake.sh"
-
+      echo \#\!/bin/sh >> /etc/profile.d/cmake.sh
+      echo export CMAKE_HOME=/usr/local/cmake >> /etc/profile.d/cmake.sh
+      echo export PATH=\$CMAKE_HOME/bin:\$PATH >> /etc/profile.d/cmake.sh
       source /etc/profile
    else
       echo "Don't find cmake-3.8.0.tar.gz"
@@ -97,48 +93,48 @@ fi
 
 if ! command -v opencv_version;then
    echo "begin install opencv..."
-   echo PASSWORD | sudo mkdir /usr/local/opencv-2.4.13.2
+   mkdir /usr/local/opencv-2.4.13.2
    if [ -s "opencv-2.4.13.2.zip" ];then
       unzip opencv-2.4.13.2.zip
       cd opencv-2.4.13.2
       cmake -D CMAKE_INSTALL_PREFIX=/usr/local/opencv-2.4.13.2 .
       make
-      echo PASSWORD | sudo make install
+      make install
 
       if [ -s "/etc/profile.d/opencv.sh" ];then
-         echo PASSWORD | sudo rm -rf /etc/profile.d/opencv.sh   
+         rm -rf /etc/profile.d/opencv.sh   
       fi
-      echo PASSWORD | sudo sh -c "echo \#\!/bin/sh >> /etc/profile.d/opencv.sh"
-      echo PASSWORD | sudo sh -c "echo export OPENCV_HOME=/usr/local/opencv-2.4.13.2 >> /etc/profile.d/opencv.sh"
-      echo PASSWORD | sudo sh -c "echo export OPENCV_INC=\"$\"OPENCV_HOME/include >> /etc/profile.d/opencv.sh"
-      echo PASSWORD | sudo sh -c "echo export OPENCV_LIB=\"$\"OPENCV_HOME/lib >> /etc/profile.d/opencv.sh"
-      echo PASSWORD | sudo sh -c "echo export OPENCV_BIN=\"$\"OPENCV_HOME/bin >> /etc/profile.d/opencv.sh"
-      echo PASSWORD | sudo sh -c "echo export PATH=\"$\"PATH:\"$\"OPENCV_BIN >> /etc/profile.d/opencv.sh"
-      echo PASSWORD | sudo sh -c "echo export C_INCLUDE_PATH=\"$\"C_INCLUDE_PATH:\"$\"OPENCV_INC >> /etc/profile.d/opencv.sh"
-      echo PASSWORD | sudo sh -c "echo export CPLUS_INCLUDE_PATH=\"$\"CPLUS_INCLUDE_PATH:\"$\"OPENCV_INC >> /etc/profile.d/opencv.sh"
+      echo \#\!/bin/sh >> /etc/profile.d/opencv.sh
+      echo export OPENCV_HOME=/usr/local/opencv-2.4.13.2 >> /etc/profile.d/opencv.sh
+      echo export OPENCV_INC=\$OPENCV_HOME/include >> /etc/profile.d/opencv.sh
+      echo export OPENCV_LIB=\$OPENCV_HOME/lib >> /etc/profile.d/opencv.sh
+      echo export OPENCV_BIN=\$OPENCV_HOME/bin >> /etc/profile.d/opencv.sh
+      echo export PATH=\$PATH:\$OPENCV_BIN >> /etc/profile.d/opencv.sh
+      echo export C_INCLUDE_PATH=\$C_INCLUDE_PATH:\$OPENCV_INC >> /etc/profile.d/opencv.sh
+      echo export CPLUS_INCLUDE_PATH=\$CPLUS_INCLUDE_PATH:\$OPENCV_INC >> /etc/profile.d/opencv.sh
 
       source /etc/profile
 
       if [ -s "/etc/ld.so.conf.d/opencv.conf" ];then
-         echo PASSWORD | sudo rm -rf /etc/ld.so.conf.d/opencv.conf
+         rm -rf /etc/ld.so.conf.d/opencv.conf
       fi
-      echo PASSWORD | sudo sh -c "echo /usr/local/opencv-2.4.13.2/lib >> /etc/ld.so.conf.d/opencv.conf"
+      echo /usr/local/opencv-2.4.13.2/lib >> /etc/ld.so.conf.d/opencv.conf
 
-      echo PASSWORD | sudo ldconfig
+      ldconfig
 
       if [ -s "/usr/local/lib/pkgconfig/opencv.pc" ];then
-         echo PASSWORD | sudo rm -rf /usr/local/lib/pkgconfig/opencv.pc
+         rm -rf /usr/local/lib/pkgconfig/opencv.pc
       fi
-      echo PASSWORD | sudo sh -c "echo prefix=/usr/local/opencv-2.4.13.2 >> /usr/local/lib/pkgconfig/opencv.pc"
-      echo PASSWORD | sudo sh -c "echo exec_prefix=\"$\"{prefix}/bin >> /usr/local/lib/pkgconfig/opencv.pc"
-      echo PASSWORD | sudo sh -c "echo includedir=\"$\"{prefix}/include >> /usr/local/lib/pkgconfig/opencv.pc"
-      echo PASSWORD | sudo sh -c "echo libdir=\"$\"{prefix}/lib >> /usr/local/lib/pkgconfig/opencv.pc"
-      echo PASSWORD | sudo sh -c "echo  >> /usr/local/lib/pkgconfig/opencv.pc"
-      echo PASSWORD | sudo sh -c "echo Name: opencv>> /usr/local/lib/pkgconfig/opencv.pc"
-      echo PASSWORD | sudo sh -c "echo Description: The opencv library>> /usr/local/lib/pkgconfig/opencv.pc"
-      echo PASSWORD | sudo sh -c "echo Version: 2.4.13.2 >> /usr/local/lib/pkgconfig/opencv.pc"
-      echo PASSWORD | sudo sh -c "echo Cflags: -I\"$\"{includedir}/opencv -I\"$\"{includedir}/opencv2 >> /usr/local/lib/pkgconfig/opencv.pc"
-      echo PASSWORD | sudo sh -c "echo Libs: -L\"$\"{libdir} -lopencv_core -lopencv_imgproc -lopencv_highgui -lopencv_ml -lopencv_video -lopencv_features2d -lopencv_calib3d -lopencv_objdetect -lopencv_contrib -lopencv_legacy -lopencv_flann >> /usr/local/lib/pkgconfig/opencv.pc"
+      echo prefix=/usr/local/opencv-2.4.13.2 >> /usr/local/lib/pkgconfig/opencv.pc
+      echo exec_prefix=\${prefix}/bin >> /usr/local/lib/pkgconfig/opencv.pc
+      echo includedir=\${prefix}/include >> /usr/local/lib/pkgconfig/opencv.pc
+      echo libdir=\${prefix}/lib >> /usr/local/lib/pkgconfig/opencv.pc
+      echo  >> /usr/local/lib/pkgconfig/opencv.pc
+      echo Name: opencv>> /usr/local/lib/pkgconfig/opencv.pc
+      echo Description: The opencv library>> /usr/local/lib/pkgconfig/opencv.pc
+      echo Version: 2.4.13.2 >> /usr/local/lib/pkgconfig/opencv.pc
+      echo Cflags: -I\${includedir}/opencv -I\${includedir}/opencv2 >> /usr/local/lib/pkgconfig/opencv.pc
+      echo Libs: -L\${libdir} -lopencv_core -lopencv_imgproc -lopencv_highgui -lopencv_ml -lopencv_video -lopencv_features2d -lopencv_calib3d -lopencv_objdetect -lopencv_contrib -lopencv_legacy -lopencv_flann >> /usr/local/lib/pkgconfig/opencv.pc
    
    else
       echo "Don't find opencv-2.4.13.2.zip"
@@ -168,8 +164,8 @@ if [ -d "mxnet" ];then
       sed -i "s/USE_CUDA_PATH = NONE/USE_CUDA_PATH = /usr/local/cuda/g" config.mk
    
       if [ ! -s "/etc/ld.so.conf.d/cuda.conf" ];then
-         echo PASSWORD | sudo sh -c "echo /usr/local/cuda/lib64 >> /etc/ld.so.conf.d/cuda.conf"
-         echo PASSWORD | sudo ldconfig        
+         echo /usr/local/cuda/lib64 >> /etc/ld.so.conf.d/cuda.conf
+         ldconfig        
       fi
    fi
 
@@ -186,8 +182,8 @@ if [ -d "mxnet" ];then
    else 
       unzip graphviz-0.8.zip
       cd graphviz-0.8
-      echo PASSWORD | sudo python setup.py build 
-      echo PASSWORD | sudo python setup.py install   
+      python setup.py build 
+      python setup.py install   
    fi
 
    cd $s_pwd
@@ -198,8 +194,8 @@ if [ -d "mxnet" ];then
    else 
       tar -xvf requests-2.7.0.tar.gz
       cd requests-2.7.0
-      echo PASSWORD | sudo python setup.py build 
-      echo PASSWORD | sudo python setup.py install   
+      python setup.py build 
+      python setup.py install   
    fi
  
    cd $s_pwd
@@ -210,8 +206,8 @@ if [ -d "mxnet" ];then
    else 
       unzip numpy-1.13.1.zip
       cd numpy-1.13.1
-      echo PASSWORD | sudo python setup.py build 
-      echo PASSWORD | sudo python setup.py install   
+      python setup.py build 
+      python setup.py install   
    fi
   
    cd $s_pwd
@@ -221,7 +217,7 @@ if [ -d "mxnet" ];then
    else 
       cd mxnet/python
 
-      echo PASSWORD | sudo python setup.py install
+      python setup.py install
    
       echo "mxnet python api install finish"
    fi
